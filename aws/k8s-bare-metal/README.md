@@ -1,7 +1,7 @@
 # Bare Metal K8 setup on AWS
 
 ## Overview
-This guide is about setting up a bare metal Kubernetes cluster on AWS. It is meant only for demo purposes and should not be used in production.
+This guide is about bare metal setup of highly available (HA) Kubernetes cluster on AWS. It is meant only for demo purposes and should not be used in production.
 
 ## Software Versions
 * Kubernetes - 1.15.3
@@ -16,12 +16,13 @@ This guide is about setting up a bare metal Kubernetes cluster on AWS. It is mea
 
 ![AWS Deployment Architecture](AWS-Deployment.png)
 
-## Pre-requisities
+## Prerequisite
 * Provision the required EC2 instances along with default VPC
 * In Security Group of VPC allow all inbound and outbound connections
 
 ## Setup
 ### Network Load Balancer Setup for Kubernetes H8
+Reference - [Create a Network Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-network-load-balancer.html)
 To setup a K8 cluster with HA, a TCP forwarding load balancer is required. This will be used by kube-apiserver for routing requests to both control plane nodes (master nodes).
 AWS ELB Network Load Balancer will be used for this purpose. This will be internal to VPC and will not be accessible from external network.
 
@@ -32,7 +33,7 @@ AWS ELB Network Load Balancer will be used for this purpose. This will be intern
 1. In Configure Security Settings, select the same security group as that being used for EC2 instances.
 1. In Configure Routing, add two routes to Master 1 and Master 2 EC2 instances on port 6443.
 1. Review and Submit to create the load balancer.
-Reference - [Create a Network Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/create-network-load-balancer.html)
+
 
 ### Hosts File Entry
 * In all EC2 instances setup hosts file (/etc/hosts) entry for all EC2 instances and Network Load Balancer
@@ -65,6 +66,7 @@ docker version
 ```
 
 ### K8 Components Installation
+Reference - [Install kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 On all 4 EC2 instances, install K8 components (kubectl, kubeadm, kubelet) using below commands:
 
 ```@shell
@@ -97,9 +99,10 @@ systemctl start kubelet
 # Pre-pull images required for K8 setup
 kubeadm config images pull
 ```
-Reference - [Install kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 
-### Setup Control Pane Nodes
+
+### Setup Kubernetes Cluster
+Reference - (Creating Highly Available clusters with kubeadm)[https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/]
 #### Steps for the first control plane node
 1. On the first control plane node, create a configuration file called kubeadm-config.yaml with below contents. controlPlaneEndpoint should match the address or DNS and port of the load balancer.
     ```@yaml
