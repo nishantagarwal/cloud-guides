@@ -1,7 +1,7 @@
 # Bare Metal K8 setup on AWS
 
 ## Overview
-This readme talks about setting up of bare metal Kubernetes cluster on AWS. This guide is meant only for demo purposes and should not be used in production.
+This guide is about setting up a bare metal Kubernetes cluster on AWS. It is meant only for demo purposes and should not be used in production.
 
 ## Software Versions
 * Kubernetes - 1.15.3
