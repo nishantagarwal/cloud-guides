@@ -102,7 +102,7 @@ kubeadm config images pull
 
 
 ### Setup Kubernetes Cluster
-Reference - (Creating Highly Available clusters with kubeadm)[https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/]
+Reference - [Creating Highly Available clusters with kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/)
 #### Steps for the first control plane node
 1. On the first control plane node, create a configuration file called kubeadm-config.yaml with below contents. controlPlaneEndpoint should match the address or DNS and port of the load balancer.
     ```@yaml
